@@ -97,10 +97,10 @@ public class TransactionServiceTest {
           transaction.setUser(user);
           transaction.setType("INCOME");
 
-          when(transactionRepository.findTransactions(any(), any(), any(), any(), any(Sort.class)))
+          when(transactionRepository.findTransactions(any(), any(), any(), any(), any(), any(Sort.class)))
                     .thenReturn(Collections.singletonList(transaction));
 
-          List<TransactionDTO> results = transactionService.getTransactions(user.getUsername(), null, null, null);
+          List<TransactionDTO> results = transactionService.getTransactions(user.getUsername(), null, null, null, null);
 
           assertFalse(results.isEmpty());
           assertEquals(1, results.size());

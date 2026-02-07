@@ -34,11 +34,8 @@ public class TransactionService {
           User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-          if (transactionDTO.getDate().isAfter(LocalDate.now().plusDays(1))) { // Allow today? Assignment says "cannot
-                                                                               // be a future date"
-               if (transactionDTO.getDate().isAfter(LocalDate.now())) {
-                    throw new IllegalArgumentException("Date cannot be in the future");
-               }
+          if (transactionDTO.getDate().isAfter(LocalDate.now())) {
+               throw new IllegalArgumentException("Date cannot be in the future");
           }
 
           Category category = categoryRepository.findByNameAndUser(transactionDTO.getCategory(), user)
@@ -58,12 +55,12 @@ public class TransactionService {
      }
 
      public List<TransactionDTO> getTransactions(String username, LocalDate startDate, LocalDate endDate,
-               Long categoryId) {
+               Long categoryId, String categoryName) {
           User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
           List<Transaction> transactions = transactionRepository.findTransactions(user, startDate, endDate, categoryId,
-                    Sort.by(Sort.Direction.DESC, "date"));
+                    categoryName, Sort.by(Sort.Direction.DESC, "date"));
 
           return transactions.stream().map(this::mapToDTO).collect(Collectors.toList());
      }

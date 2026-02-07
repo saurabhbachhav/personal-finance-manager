@@ -2,11 +2,15 @@ package com.example.pfm.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import jakarta.validation.ConstraintViolationException;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +27,26 @@ public class GlobalExceptionHandler {
                errors.put(fieldName, errorMessage);
           });
           return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+     }
+
+     @ExceptionHandler(BadCredentialsException.class)
+     public ResponseEntity<Map<String, String>> handleBadCredentialsException(BadCredentialsException ex) {
+          return new ResponseEntity<>(Collections.singletonMap("message", "Bad credentials"), HttpStatus.UNAUTHORIZED);
+     }
+
+     @ExceptionHandler(ConstraintViolationException.class)
+     public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException ex) {
+          Map<String, String> errors = new HashMap<>();
+          ex.getConstraintViolations().forEach(violation -> {
+               errors.put("message", violation.getMessage());
+          });
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+     }
+
+     @ExceptionHandler({ MethodArgumentTypeMismatchException.class, DateTimeParseException.class })
+     public ResponseEntity<Map<String, String>> handleTypeMismatchException(Exception ex) {
+          return new ResponseEntity<>(Collections.singletonMap("message", "Invalid input format"),
+                    HttpStatus.BAD_REQUEST);
      }
 
      @ExceptionHandler(IllegalArgumentException.class)

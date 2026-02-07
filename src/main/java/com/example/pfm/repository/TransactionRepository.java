@@ -19,12 +19,14 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
      @Query("SELECT t FROM Transaction t WHERE t.user = :user " +
                "AND (:startDate IS NULL OR t.date >= :startDate) " +
                "AND (:endDate IS NULL OR t.date <= :endDate) " +
-               "AND (:categoryId IS NULL OR t.category.id = :categoryId)")
+               "AND (:categoryId IS NULL OR t.category.id = :categoryId) " +
+               "AND (:categoryName IS NULL OR t.category.name = :categoryName)")
      List<Transaction> findTransactions(
                @Param("user") User user,
                @Param("startDate") LocalDate startDate,
                @Param("endDate") LocalDate endDate,
                @Param("categoryId") Long categoryId,
+               @Param("categoryName") String categoryName,
                Sort sort);
 
      // For reports

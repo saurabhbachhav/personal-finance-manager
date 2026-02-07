@@ -68,7 +68,7 @@ public class GoalServiceTest {
           savedGoal.setUser(user);
 
           when(goalRepository.save(any(Goal.class))).thenReturn(savedGoal);
-          when(transactionRepository.findTransactions(any(), any(), any(), any(), any(Sort.class)))
+          when(transactionRepository.findTransactions(any(), any(), any(), any(), any(), any(Sort.class)))
                     .thenReturn(Collections.emptyList());
 
           GoalDTO result = goalService.createGoal(user.getUsername(), goalDTO);

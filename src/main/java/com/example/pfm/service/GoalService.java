@@ -113,8 +113,8 @@ public class GoalService {
           // "Progress".
           // This is a bit weird but valid per the requirements.
 
-          List<Transaction> transactions = transactionRepository.findTransactions(
-                    user, goal.getStartDate(), null, null, Sort.unsorted());
+          List<Transaction> transactions = transactionRepository.findTransactions(user, goal.getStartDate(), null, null,
+                    null, Sort.by(Sort.Direction.ASC, "date"));
 
           BigDecimal income = transactions.stream()
                     .filter(t -> "INCOME".equals(t.getType()))

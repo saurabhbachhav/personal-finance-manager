@@ -42,9 +42,10 @@ public class TransactionController {
                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                @RequestParam(required = false) Long categoryId,
+               @RequestParam(required = false) String categoryName,
                Authentication authentication) {
-          return ResponseEntity
-                    .ok(transactionService.getTransactions(authentication.getName(), startDate, endDate, categoryId));
+          return ResponseEntity.ok(transactionService.getTransactions(authentication.getName(), startDate, endDate,
+                    categoryId, categoryName));
      }
 
      @PutMapping("/{id}")

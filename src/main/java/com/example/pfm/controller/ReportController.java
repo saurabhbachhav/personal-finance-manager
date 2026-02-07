@@ -25,6 +25,9 @@ public class ReportController {
                @PathVariable int year,
                @PathVariable int month,
                Authentication authentication) {
+          if (month < 1 || month > 12) {
+               throw new IllegalArgumentException("Month must be between 1 and 12");
+          }
           return ResponseEntity.ok(reportService.getMonthlyReport(authentication.getName(), year, month));
      }
 
